@@ -2,14 +2,19 @@
 #+author: Matt Brigida, Ph.D.
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
+* Example
+
 Here we are going to cover how to test for a differential effect of one event on two assets. As an example, our event will be the results of the 2020 Presidential election, and our assets will be oil (XLE) and tech (XLK) ETFs.  Our null hypothesis is:
 
-#+begin_example
+#+begin_quote
 There is no difference in the reactions of XLE anf XLF to the outcome of the 2020 Presidential election.
-#+end_example
+#+end_quote
 
 If we are able to reject the null then we have found evidence in favor of a different reaction. 
 
+* Overview
+
+There are a few general steps to an event study.  We need to be able to calculate what each asset /would have done/ if the event had not occurred.  So we 
 
 
 
