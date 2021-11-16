@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-15 Mon 21:12 -->
+<!-- 2021-11-16 Tue 13:48 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A Simple Event Study</title>
@@ -199,10 +199,45 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 <body>
 <div id="content" class="content">
 <h1 class="title">A Simple Event Study</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org291a63e">1. Example</a></li>
+<li><a href="#org3b77e89">2. Overview</a></li>
+<li><a href="#orgc320c6b">3. Implementation</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org291a63e" class="outline-2">
+<h2 id="org291a63e"><span class="section-number-2">1.</span> Example</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 Here we are going to cover how to test for a differential effect of one event on two assets. As an example, our event will be the results of the 2020 Presidential election, and our assets will be oil (XLE) and tech (XLK) ETFs.  Our null hypothesis is:
 </p>
@@ -217,9 +252,46 @@ There is no difference in the reactions of XLE anf XLF to the outcome of the 202
 If we are able to reject the null then we have found evidence in favor of a different reaction. 
 </p>
 </div>
+</div>
+
+<div id="outline-container-org3b77e89" class="outline-2">
+<h2 id="org3b77e89"><span class="section-number-2">2.</span> Overview</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+To calculate the effect of the event, we need to be able to calculate what each asset <i>would have done</i> if the event had not occurred.  To do this, in an event study there is an estimation period and an event period.
+</p>
+
+<p>
+<b>Estimation period:</b>
+</p>
+
+<ul class="org-ul">
+<li>begins when you choose and ends, say, 10 days prior to the event.</li>
+<li>you estimate a market model regression (\(R_{E} = \alpha + \beta R_M + e\)) for each ETF over this period, and save the alpha and beta coefficients.  \(R_E\) is an ETF, and \(R_M\) is the return on the market.</li>
+</ul>
+
+<p>
+<b>Event period:</b>
+</p>
+
+<ul class="org-ul">
+<li>Calculate daily abnormal returns for each ETF.  Abnormal returns are actual returns minus expected returns.  \(R_E - \alpha - \beta R_M\) where the alpha and beta are the estimates for that particular ETF.</li>
+<li>Sum the daily abnormal returns into Cumulative Abnormal Returns from 10 days before the event to 10 days after, <i>CAR(-10, 10)</i></li>
+</ul>
+
+<p>
+Once you have the CARs for each ETF you can run a t-test for significantly different CARs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc320c6b" class="outline-2">
+<h2 id="orgc320c6b"><span class="section-number-2">3.</span> Implementation</h2>
+</div>
+</div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2021-11-15 Mon 21:12</p>
+<p class="date">Created: 2021-11-16 Tue 13:48</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -14,7 +14,22 @@ If we are able to reject the null then we have found evidence in favor of a diff
 
 * Overview
 
-There are a few general steps to an event study.  We need to be able to calculate what each asset /would have done/ if the event had not occurred.  So we 
+To calculate the effect of the event, we need to be able to calculate what each asset /would have done/ if the event had not occurred.  To do this, in an event study there is an estimation period and an event period.
+
+*Estimation period:*
+
+- begins when you choose and ends, say, 10 days prior to the event. 
+- you estimate a market model regression ($R_{E} = \alpha + \beta R_M + e$) for each ETF over this period, and save the alpha and beta coefficients.  $R_E$ is an ETF, and $R_M$ is the return on the market.
+
+*Event period:*
+
+- Calculate daily abnormal returns for each ETF.  Abnormal returns are actual returns minus expected returns.  $R_E - \alpha - \beta R_M$ where the alpha and beta are the estimates for that particular ETF.
+-  Sum the daily abnormal returns into Cumulative Abnormal Returns from 10 days before the event to 10 days after, /CAR(-10, 10)/
+
+Once you have the CARs for each ETF you can run a t-test for significantly different CARs.
+
+* Implementation
+
 
 
 
