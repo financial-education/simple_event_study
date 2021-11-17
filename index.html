@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-16 Tue 13:48 -->
+<!-- 2021-11-16 Tue 21:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A Simple Event Study</title>
@@ -228,15 +228,32 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org291a63e">1. Example</a></li>
-<li><a href="#org3b77e89">2. Overview</a></li>
-<li><a href="#orgc320c6b">3. Implementation</a></li>
+<li><a href="#org495a248">1. Example</a></li>
+<li><a href="#org73987ee">2. Overview</a></li>
+<li><a href="#org73283ef">3. Implementation</a>
+<ul>
+<li><a href="#org0ea0c19">3.1. Data Preparation</a></li>
+<li><a href="#org14c4838">3.2. Regression Estimation</a>
+<ul>
+<li><a href="#org294dab8">3.2.1. XLE</a></li>
+<li><a href="#orga1f76c6">3.2.2. XLK</a></li>
+</ul>
+</li>
+<li><a href="#orga6e112c">3.3. Event Abnormal Returns</a>
+<ul>
+<li><a href="#orgf1822b7">3.3.1. XLE</a></li>
+<li><a href="#org2271fee">3.3.2. XLK</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga50ea78">4. Hypothesis Test</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org291a63e" class="outline-2">
-<h2 id="org291a63e"><span class="section-number-2">1.</span> Example</h2>
+<div id="outline-container-org495a248" class="outline-2">
+<h2 id="org495a248"><span class="section-number-2">1.</span> Example</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Here we are going to cover how to test for a differential effect of one event on two assets. As an example, our event will be the results of the 2020 Presidential election, and our assets will be oil (XLE) and tech (XLK) ETFs.  Our null hypothesis is:
@@ -254,8 +271,8 @@ If we are able to reject the null then we have found evidence in favor of a diff
 </div>
 </div>
 
-<div id="outline-container-org3b77e89" class="outline-2">
-<h2 id="org3b77e89"><span class="section-number-2">2.</span> Overview</h2>
+<div id="outline-container-org73987ee" class="outline-2">
+<h2 id="org73987ee"><span class="section-number-2">2.</span> Overview</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 To calculate the effect of the event, we need to be able to calculate what each asset <i>would have done</i> if the event had not occurred.  To do this, in an event study there is an estimation period and an event period.
@@ -285,13 +302,214 @@ Once you have the CARs for each ETF you can run a t-test for significantly diffe
 </div>
 </div>
 
-<div id="outline-container-orgc320c6b" class="outline-2">
-<h2 id="orgc320c6b"><span class="section-number-2">3.</span> Implementation</h2>
+<div id="outline-container-org73283ef" class="outline-2">
+<h2 id="org73283ef"><span class="section-number-2">3.</span> Implementation</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We'll implement the event study in Python, however R is probably a better choice of language given its built-in statistical capabilities.  You can also do this in Excel, though it is more tedious.
+</p>
+
+<p>
+First let's load the libraries we are going to use:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">import yfinance as yf
+from time import sleep
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org0ea0c19" class="outline-3">
+<h3 id="org0ea0c19"><span class="section-number-3">3.1.</span> Data Preparation</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Now we can pull the data and convert it into returns:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">spy = yf.Ticker("SPY")
+spy_price = spy.history(period="max")
+sleep(5)
+xle = yf.Ticker("XLE")
+xle_price = xle.history(period="max")
+sleep(5)
+xlk = yf.Ticker("XLK")
+xlk_price = xlk.history(period="max")
+</pre>
+</div>
+
+<p>
+Convert to returns:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">spy_ret = spy_price["Close"].pct_change()[1:]
+xle_ret = xle_price["Close"].pct_change()[1:]
+xlk_ret = xlk_price["Close"].pct_change()[1:]
+all_rets = pd.concat([spy_ret, xle_ret, xlk_ret], axis=1)
+all_rets.columns = ["spy", "xle", "xlk"]
+</pre>
+</div>
+
+<p>
+Split into estimation and event windows:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">est = all_rets.loc['2020-09-01':'2020-10-19']
+event = all_rets.loc['2020-10-20':'2020-11-16']
+</pre>
+</div>
+
+<p>
+Let's look at the cumulative returns over the estimation and event windows.  This is not required, though it is good to take a look at your data from time to time.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org14c4838" class="outline-3">
+<h3 id="org14c4838"><span class="section-number-3">3.2.</span> Regression Estimation</h3>
+<div class="outline-text-3" id="text-3-2">
+</div>
+<div id="outline-container-org294dab8" class="outline-4">
+<h4 id="org294dab8"><span class="section-number-4">3.2.1.</span> XLE</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<div class="org-src-container">
+<pre class="src src-python">xle_reg = LinearRegression().fit(est["spy"].values.reshape(-1,1), est["xle"])
+xle_alpha = xle_reg.intercept_
+xle_beta = xle_reg.coef_[0]
+print(xle_alpha)
+print(xle_beta)
+</pre>
+</div>
+
+<pre class="example">
+-0.004507244128312023
+0.77301253404372
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orga1f76c6" class="outline-4">
+<h4 id="orga1f76c6"><span class="section-number-4">3.2.2.</span> XLK</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<div class="org-src-container">
+<pre class="src src-python">xlk_reg = LinearRegression().fit(est["spy"].values.reshape(-1,1), est["xlk"])
+xlk_alpha = xlk_reg.intercept_
+xlk_beta = xlk_reg.coef_[0]
+print(xlk_alpha)
+print(xlk_beta)
+</pre>
+</div>
+
+<pre class="example">
+-0.00027788445267567087
+1.4045819551893277
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga6e112c" class="outline-3">
+<h3 id="orga6e112c"><span class="section-number-3">3.3.</span> Event Abnormal Returns</h3>
+<div class="outline-text-3" id="text-3-3">
+</div>
+<div id="outline-container-orgf1822b7" class="outline-4">
+<h4 id="orgf1822b7"><span class="section-number-4">3.3.1.</span> XLE</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<div class="org-src-container">
+<pre class="src src-python">xle_ars = event["xle"] - xle_alpha - xle_beta * event["spy"]
+#print(xle_ars)
+xle_cars = xle_ars.cumsum()
+print(xle_cars)
+</pre>
+</div>
+
+<pre class="example" id="org29ec74d">
+Date
+2020-10-20    0.013255
+2020-10-21    0.000162
+2020-10-22    0.041684
+2020-10-23    0.038655
+2020-10-26    0.021580
+2020-10-27    0.015783
+2020-10-28    0.004872
+2020-10-29    0.032197
+2020-10-30    0.050365
+2020-11-02    0.080331
+2020-11-03    0.065466
+2020-11-04    0.054051
+2020-11-05    0.043483
+2020-11-06    0.026523
+2020-11-09    0.164075
+2020-11-10    0.202082
+2020-11-11    0.190592
+2020-11-12    0.170330
+2020-11-13    0.200538
+2020-11-16    0.261217
+dtype: float64
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org2271fee" class="outline-4">
+<h4 id="org2271fee"><span class="section-number-4">3.3.2.</span> XLK</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<div class="org-src-container">
+<pre class="src src-python">xlk_ars = event["xlk"] - xlk_alpha - xlk_beta * event["spy"]
+#print(xlk_ars)
+xlk_cars = xlk_ars.cumsum()
+print(xlk_cars)
+</pre>
+</div>
+
+<pre class="example" id="orge62557f">
+Date
+2020-10-20   -0.001900
+2020-10-21   -0.000472
+2020-10-22   -0.012600
+2020-10-23   -0.018187
+2020-10-26   -0.013651
+2020-10-27   -0.003526
+2020-10-28    0.002338
+2020-10-29    0.005020
+2020-10-30   -0.002199
+2020-11-02   -0.015139
+2020-11-03   -0.022025
+2020-11-04   -0.014234
+2020-11-05   -0.010286
+2020-11-06   -0.006138
+2020-11-09   -0.030748
+2020-11-10   -0.047051
+2020-11-11   -0.033484
+2020-11-12   -0.028487
+2020-11-13   -0.039168
+2020-11-16   -0.046769
+dtype: float64
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga50ea78" class="outline-2">
+<h2 id="orga50ea78"><span class="section-number-2">4.</span> Hypothesis Test</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2021-11-16 Tue 13:48</p>
+<p class="date">Created: 2021-11-16 Tue 21:56</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
