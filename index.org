@@ -41,6 +41,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 #+end_src
 
 #+RESULTS:
@@ -99,11 +100,15 @@ xle_alpha = xle_reg.intercept_
 xle_beta = xle_reg.coef_[0]
 print(xle_alpha)
 print(xle_beta)
+xle_pred = xle_reg.predict(est["spy"].values.reshape(- 1, 1))
+xle_rmse = mean_squared_error(y_true=est["xle"], y_pred=xle_pred, squared=False)
+print(xle_rmse)
 #+end_src
 
 #+RESULTS:
-: 0.0026831994390624733
-: 1.194557934377376
+: -0.004507236238722819
+: 0.7730141251287208
+: 0.017148482087958307
 
 *** XLK
 
@@ -113,11 +118,15 @@ xlk_alpha = xlk_reg.intercept_
 xlk_beta = xlk_reg.coef_[0]
 print(xlk_alpha)
 print(xlk_beta)
+xlk_pred = xlk_reg.predict(est["spy"].values.reshape(- 1, 1))
+xlk_rmse = mean_squared_error(y_true=est["xlk"], y_pred=xlk_pred, squared=False)
+print(xlk_rmse)
 #+end_src
 
 #+RESULTS:
-: -0.0018683849827092736
-: 1.2712535311904847
+: -0.00027788272341562907
+: 1.4045785420581811
+: 0.006590119452466074
 
 ** Event Abnormal Returns
 
@@ -194,3 +203,20 @@ dtype: float64
 
 * Hypothesis Test
 
+
+#+begin_src python :session event :exports both :results output
+scar_xle = xle_cars.values[-1] / np.sqrt((xle_cars.shape[0] * xle_ars.values.var()))
+print(scar_xle)
+#+end_src
+
+#+RESULTS:
+: 1.579788790369851
+
+#+begin_src python :session event :exports both :results output
+
+scar_xlk = xlk_cars.values[-1] / np.sqrt((xlk_cars.shape[0] * xlk_ars.values.var()))
+print(scar_xlk)
+#+end_src
+
+#+RESULTS:
+: -1.0867594037137869
