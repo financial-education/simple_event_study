@@ -203,6 +203,7 @@ dtype: float64
 
 * Hypothesis Test
 
+** Test Statistic
 
 #+begin_src python :session event :exports both :results output
 scar_xle = xle_cars.values[-1] / np.sqrt((xle_cars.shape[0] * xle_ars.values.var()))
@@ -213,10 +214,30 @@ print(scar_xle)
 : 1.579788790369851
 
 #+begin_src python :session event :exports both :results output
-
 scar_xlk = xlk_cars.values[-1] / np.sqrt((xlk_cars.shape[0] * xlk_ars.values.var()))
 print(scar_xlk)
 #+end_src
 
 #+RESULTS:
 : -1.0867594037137869
+
+These test statistics have a t-distribution with the length of the event window minus two degrees of freedom.  If we had a longer event window (say over 50 days) then we could use a standard normal.  We can use these to test whether a CAR is significantly different from 0.
+
+** Test for Significantly Different Means
+
+$$t = \frac{CAR_{XLE} - CAR_{XLK}{\sqrt{\frac{\hat{\sigma}_{XLE}^{2} + \hat{\sigma}_{XLK}^{2}}{2}}\sqrt{\frac{2}{n}}}$$
+
+#+begin_src python :session event :exports both :results output
+test_stat = (xle_cars.values[-1] - xlk_cars.values[-1]) / (np.sqrt( (xle_cars.shape[0] * xle_ars.values.var() - xlk_cars.shape[0] * xlk_ars.values.var()) / 2) * np.sqrt(2 / xle_cars.shape[0]))
+print(test_stat)
+#+end_src
+
+#+RESULTS:
+: 8.627318627161138
+
+Which is significant at the less than 1% level (see table of values from t-distribution).  So we conclude that or evidence indicates that /XLE/ outperformed /XLK/ around the 2020 election results.
+
+* Counterarguments
+
+But take a look at the daily CARs, it looks like /XLE/ began to outperform on 11/9 which is about 6 days after the election results were released.  So I think the event window is too long.  We should calculate /CAR(-5, 5)/ and re-test for significance.
+
