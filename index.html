@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-18 Thu 14:24 -->
+<!-- 2021-11-18 Thu 14:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A Simple Event Study</title>
@@ -228,38 +228,38 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org006be54">1. Example</a></li>
-<li><a href="#org7244605">2. Overview</a></li>
-<li><a href="#orgfc453d5">3. Implementation</a>
+<li><a href="#org78b7099">1. Example</a></li>
+<li><a href="#org2e2f591">2. Overview</a></li>
+<li><a href="#org95eb75c">3. Implementation</a>
 <ul>
-<li><a href="#org7ec0e70">3.1. Data Preparation</a></li>
-<li><a href="#org4f353c2">3.2. Regression Estimation</a>
+<li><a href="#org105863d">3.1. Data Preparation</a></li>
+<li><a href="#org5d8c33b">3.2. Regression Estimation</a>
 <ul>
-<li><a href="#orgea7b98e">3.2.1. XLE</a></li>
-<li><a href="#orgfd3dc1b">3.2.2. XLK</a></li>
+<li><a href="#org02fa348">3.2.1. XLE</a></li>
+<li><a href="#org4c1364c">3.2.2. XLK</a></li>
 </ul>
 </li>
-<li><a href="#org18f7c22">3.3. Event Abnormal Returns</a>
+<li><a href="#org54ee357">3.3. Event Abnormal Returns</a>
 <ul>
-<li><a href="#orge290788">3.3.1. XLE</a></li>
-<li><a href="#org779b684">3.3.2. XLK</a></li>
+<li><a href="#org157e62f">3.3.1. XLE</a></li>
+<li><a href="#orgaa619c1">3.3.2. XLK</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgfca8a43">4. Hypothesis Test</a>
+<li><a href="#org72f9975">4. Hypothesis Test</a>
 <ul>
-<li><a href="#orgf1bc774">4.1. Test Statistic</a></li>
-<li><a href="#org3cae67b">4.2. Test for Significantly Different Means</a></li>
+<li><a href="#org8999116">4.1. Test Statistic</a></li>
+<li><a href="#orgc59535b">4.2. Test for Significantly Different Means</a></li>
 </ul>
 </li>
-<li><a href="#orgf18e10c">5. Counterarguments</a></li>
+<li><a href="#orge15c7d3">5. Counterarguments</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org006be54" class="outline-2">
-<h2 id="org006be54"><span class="section-number-2">1.</span> Example</h2>
+<div id="outline-container-org78b7099" class="outline-2">
+<h2 id="org78b7099"><span class="section-number-2">1.</span> Example</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Here we are going to cover how to test for a differential effect of one event on two assets. As an example, our event will be the results of the 2020 Presidential election, and our assets will be oil (XLE) and tech (XLK) ETFs.  Our null hypothesis is:
@@ -277,8 +277,8 @@ If we are able to reject the null then we have found evidence in favor of a diff
 </div>
 </div>
 
-<div id="outline-container-org7244605" class="outline-2">
-<h2 id="org7244605"><span class="section-number-2">2.</span> Overview</h2>
+<div id="outline-container-org2e2f591" class="outline-2">
+<h2 id="org2e2f591"><span class="section-number-2">2.</span> Overview</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 To calculate the effect of the event, we need to be able to calculate what each asset <i>would have done</i> if the event had not occurred.  To do this, in an event study there is an estimation period and an event period.
@@ -308,8 +308,8 @@ Once you have the CARs for each ETF you can run a t-test for significantly diffe
 </div>
 </div>
 
-<div id="outline-container-orgfc453d5" class="outline-2">
-<h2 id="orgfc453d5"><span class="section-number-2">3.</span> Implementation</h2>
+<div id="outline-container-org95eb75c" class="outline-2">
+<h2 id="org95eb75c"><span class="section-number-2">3.</span> Implementation</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 We'll implement the event study in Python, however R is probably a better choice of language given its built-in statistical capabilities.  You can also do this in Excel, though it is more tedious.
@@ -331,8 +331,8 @@ from sklearn.metrics import mean_squared_error
 </div>
 </div>
 
-<div id="outline-container-org7ec0e70" class="outline-3">
-<h3 id="org7ec0e70"><span class="section-number-3">3.1.</span> Data Preparation</h3>
+<div id="outline-container-org105863d" class="outline-3">
+<h3 id="org105863d"><span class="section-number-3">3.1.</span> Data Preparation</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 Now we can pull the data and convert it into returns:
@@ -384,12 +384,12 @@ Let's look at the cumulative returns over the estimation and event windows.  Thi
 </div>
 </div>
 
-<div id="outline-container-org4f353c2" class="outline-3">
-<h3 id="org4f353c2"><span class="section-number-3">3.2.</span> Regression Estimation</h3>
+<div id="outline-container-org5d8c33b" class="outline-3">
+<h3 id="org5d8c33b"><span class="section-number-3">3.2.</span> Regression Estimation</h3>
 <div class="outline-text-3" id="text-3-2">
 </div>
-<div id="outline-container-orgea7b98e" class="outline-4">
-<h4 id="orgea7b98e"><span class="section-number-4">3.2.1.</span> XLE</h4>
+<div id="outline-container-org02fa348" class="outline-4">
+<h4 id="org02fa348"><span class="section-number-4">3.2.1.</span> XLE</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <p>
 \[R_{XLE} = \alpha_{XLE} + \beta_{XLE} R_M + e\]
@@ -412,15 +412,15 @@ print(xle_rmse)
 </div>
 
 <pre class="example">
--0.004507235278707284
-0.773012064608419
-0.017148483329475998
+-0.004507238730465367
+0.7730119705798506
+0.017148482011230558
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgfd3dc1b" class="outline-4">
-<h4 id="orgfd3dc1b"><span class="section-number-4">3.2.2.</span> XLK</h4>
+<div id="outline-container-org4c1364c" class="outline-4">
+<h4 id="org4c1364c"><span class="section-number-4">3.2.2.</span> XLK</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <p>
 \[R_{XLK} = \alpha_{XLK} + \beta_{XLK} R_M + e\]
@@ -443,20 +443,20 @@ print(xlk_rmse)
 </div>
 
 <pre class="example">
--0.0002778759141710454
-1.4045777098046799
-0.0065901130007539775
+-0.00027787940826697445
+1.4045779196999413
+0.00659011881272826
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org18f7c22" class="outline-3">
-<h3 id="org18f7c22"><span class="section-number-3">3.3.</span> Event Abnormal Returns</h3>
+<div id="outline-container-org54ee357" class="outline-3">
+<h3 id="org54ee357"><span class="section-number-3">3.3.</span> Event Abnormal Returns</h3>
 <div class="outline-text-3" id="text-3-3">
 </div>
-<div id="outline-container-orge290788" class="outline-4">
-<h4 id="orge290788"><span class="section-number-4">3.3.1.</span> XLE</h4>
+<div id="outline-container-org157e62f" class="outline-4">
+<h4 id="org157e62f"><span class="section-number-4">3.3.1.</span> XLE</h4>
 <div class="outline-text-4" id="text-3-3-1">
 <div class="org-src-container">
 <pre class="src src-python">xle_ars = event["xle"] - xle_alpha - xle_beta * event["spy"]
@@ -466,7 +466,7 @@ print(xle_cars)
 </pre>
 </div>
 
-<pre class="example" id="orgad34bf6">
+<pre class="example" id="orgc77efde">
 Date
 2020-10-20    0.013255
 2020-10-21    0.000162
@@ -474,7 +474,7 @@ Date
 2020-10-23    0.038655
 2020-10-26    0.021580
 2020-10-27    0.015783
-2020-10-28    0.004872
+2020-10-28    0.004871
 2020-10-29    0.032197
 2020-10-30    0.050365
 2020-11-02    0.080331
@@ -494,8 +494,8 @@ dtype: float64
 </div>
 
 
-<div id="outline-container-org779b684" class="outline-4">
-<h4 id="org779b684"><span class="section-number-4">3.3.2.</span> XLK</h4>
+<div id="outline-container-orgaa619c1" class="outline-4">
+<h4 id="orgaa619c1"><span class="section-number-4">3.3.2.</span> XLK</h4>
 <div class="outline-text-4" id="text-3-3-2">
 <div class="org-src-container">
 <pre class="src src-python">xlk_ars = event["xlk"] - xlk_alpha - xlk_beta * event["spy"]
@@ -505,13 +505,13 @@ print(xlk_cars)
 </pre>
 </div>
 
-<pre class="example" id="org406c169">
+<pre class="example" id="org0a0b193">
 Date
 2020-10-20   -0.001900
 2020-10-21   -0.000472
 2020-10-22   -0.012600
 2020-10-23   -0.018187
-2020-10-26   -0.013652
+2020-10-26   -0.013651
 2020-10-27   -0.003526
 2020-10-28    0.002337
 2020-10-29    0.005020
@@ -534,12 +534,12 @@ dtype: float64
 </div>
 </div>
 
-<div id="outline-container-orgfca8a43" class="outline-2">
-<h2 id="orgfca8a43"><span class="section-number-2">4.</span> Hypothesis Test</h2>
+<div id="outline-container-org72f9975" class="outline-2">
+<h2 id="org72f9975"><span class="section-number-2">4.</span> Hypothesis Test</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgf1bc774" class="outline-3">
-<h3 id="orgf1bc774"><span class="section-number-3">4.1.</span> Test Statistic</h3>
+<div id="outline-container-org8999116" class="outline-3">
+<h3 id="org8999116"><span class="section-number-3">4.1.</span> Test Statistic</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-python">scar_xle = xle_cars.values[-1] / np.sqrt((xle_cars.shape[0] * xle_ars.values.var()))
@@ -548,7 +548,7 @@ print(scar_xle)
 </div>
 
 <pre class="example">
-1.5797900457160587
+1.5797904365289115
 </pre>
 
 
@@ -559,7 +559,7 @@ print(scar_xlk)
 </div>
 
 <pre class="example">
--1.0867631837040264
+-1.086763354109323
 </pre>
 
 
@@ -569,11 +569,11 @@ These test statistics have a t-distribution with the length of the event window 
 </div>
 </div>
 
-<div id="outline-container-org3cae67b" class="outline-3">
-<h3 id="org3cae67b"><span class="section-number-3">4.2.</span> Test for Significantly Different Means</h3>
+<div id="outline-container-orgc59535b" class="outline-3">
+<h3 id="orgc59535b"><span class="section-number-3">4.2.</span> Test for Significantly Different Means</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
-\[t = \frac{CAR_{XLE} - CAR_{XLK}{\sqrt{\frac{\hat{\sigma}_{XLE}^{2} + \hat{\sigma}_{XLK}^{2}}{2}}\sqrt{\frac{2}{n}}}\]
+\[t = \frac{CAR_{XLE} - CAR_{XLK}}{\sqrt{\frac{\hat{\sigma}_{XLE}^{2} + \hat{\sigma}_{XLK}^{2}}{2}}\sqrt{\frac{2}{n}}}\]
 </p>
 
 <div class="org-src-container">
@@ -583,7 +583,7 @@ print(test_stat)
 </div>
 
 <pre class="example">
-8.62731389099751
+8.627317586096085
 </pre>
 
 
@@ -594,8 +594,8 @@ Which is significant at the less than 1% level (see table of values from t-distr
 </div>
 </div>
 
-<div id="outline-container-orgf18e10c" class="outline-2">
-<h2 id="orgf18e10c"><span class="section-number-2">5.</span> Counterarguments</h2>
+<div id="outline-container-orge15c7d3" class="outline-2">
+<h2 id="orge15c7d3"><span class="section-number-2">5.</span> Counterarguments</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 But take a look at the daily CARs, it looks like <i>XLE</i> began to outperform on 11/9 which is about 6 days after the election results were released.  So I think the event window is too long.  We should calculate <i>CAR(-5, 5)</i> and re-test for significance.
@@ -605,7 +605,7 @@ But take a look at the daily CARs, it looks like <i>XLE</i> began to outperform 
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2021-11-18 Thu 14:24</p>
+<p class="date">Created: 2021-11-18 Thu 14:58</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

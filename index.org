@@ -65,7 +65,7 @@ xlk_price = xlk.history(period="max")
 
 Convert to returns:
 
-#+begin_src python :session event :exports both
+#+begin_src python :session event :exports both :cache yes
 spy_ret = spy_price["Close"].pct_change()[1:]
 xle_ret = xle_price["Close"].pct_change()[1:]
 xlk_ret = xlk_price["Close"].pct_change()[1:]
@@ -233,7 +233,7 @@ These test statistics have a t-distribution with the length of the event window 
 
 ** Test for Significantly Different Means
 
-$$t = \frac{CAR_{XLE} - CAR_{XLK}{\sqrt{\frac{\hat{\sigma}_{XLE}^{2} + \hat{\sigma}_{XLK}^{2}}{2}}\sqrt{\frac{2}{n}}}$$
+$$t = \frac{CAR_{XLE} - CAR_{XLK}}{\sqrt{\frac{\hat{\sigma}_{XLE}^{2} + \hat{\sigma}_{XLK}^{2}}{2}}\sqrt{\frac{2}{n}}}$$
 
 #+begin_src python :session event :exports both :results output
 test_stat = (xle_cars.values[-1] - xlk_cars.values[-1]) / (np.sqrt( (xle_cars.shape[0] * xle_ars.values.var() - xlk_cars.shape[0] * xlk_ars.values.var()) / 2) * np.sqrt(2 / xle_cars.shape[0]))
