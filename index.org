@@ -94,6 +94,10 @@ Let's look at the cumulative returns over the estimation and event windows.  Thi
 
 *** XLE
 
+$$R_{XLE} = \alpha_{XLE} + \beta_{XLE} R_M + e$$
+
+Where $R_{XLE}$ and $R_M$ are the returns on the /XLE/ and /SPY/.  Note, $R_M$ denotes the return on the market portfolio, and we generally use the /SPY/ ETF to proxy for the market.
+
 #+begin_src python :session event :exports both :results output
 xle_reg = LinearRegression().fit(est["spy"].values.reshape(-1,1), est["xle"])
 xle_alpha = xle_reg.intercept_
@@ -111,6 +115,10 @@ print(xle_rmse)
 : 0.017148482087958307
 
 *** XLK
+
+$$R_{XLK} = \alpha_{XLK} + \beta_{XLK} R_M + e$$
+
+Where $R_{XLE}$ and $R_M$ are the returns on the /XLK/ and /SPY/.
 
 #+begin_src python :session event :exports both :results output
 xlk_reg = LinearRegression().fit(est["spy"].values.reshape(-1,1), est["xlk"])
