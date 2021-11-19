@@ -249,3 +249,6 @@ Which is significant at the less than 1% level (see table of values from t-distr
 
 But take a look at the daily CARs, it looks like /XLE/ began to outperform on 11/9 which is about 6 days after the election results were released.  So I think the event window is too long.  We should calculate /CAR(-5, 5)/ and re-test for significance.
 
+** Alternative Window
+
+Here we'll test for significantly different /CAR(-5, 5)/ values.
